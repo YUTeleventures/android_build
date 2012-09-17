@@ -22,6 +22,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - godir:   Go to the directory containing a file.
 - sshdremote: Add a git remote for matching SSHD repository.
 - cmremote: Add git remote for CM repository.
+- aospremote: Add git remote for matching AOSP repository
 - mka:      Builds using SCHED_BATCH on all processors
 - reposync: Parallel repo sync using ionice and SCHED_BATCH
 
@@ -1597,6 +1598,7 @@ function sshdremote()
     echo "Remote 'sshd' created"
     fi
 }
+export -f sshdremote
 
 function cmremote()
 {
@@ -1610,6 +1612,24 @@ function cmremote()
     git remote add cm git@github.com:CyanogenMod/$PFX
     echo "Remote 'cm' created"
 }
+export -f cmremote
+
+function aospremote()
+{
+    git remote rm aosp 2> /dev/null
+    if [ ! -d .git ]
+    then
+        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+    fi
+    PROJECT=`pwd | sed s#$ANDROID_BUILD_TOP/##g`
+    if (echo $PROJECT | grep -qv "^device")
+    then
+        PFX="platform/"
+    fi
+    git remote add aosp https://android.googlesource.com/$PFX$PROJECT
+    echo "Remote 'aosp' created"
+}
+export -f aospremote
 
 function mka() {
     case `uname -s` in
