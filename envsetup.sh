@@ -81,6 +81,7 @@ function check_product()
 
     if (echo -n $1 | grep -q -e "^sshd_") ; then
        SSHD_BUILD=$(echo -n $1 | sed -e 's/^sshd_//g')
+       export BUILD_NUMBER=$((date +%s%N ; echo $SSHD_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
        SSHD_BUILD=
     fi
