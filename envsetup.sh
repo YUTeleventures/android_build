@@ -550,6 +550,7 @@ function brunch()
 function breakfast()
 {
     target=$1
+    local variant=$2
     SSHD_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
@@ -570,7 +571,10 @@ function breakfast()
             lunch $target
         else
             # This is probably just the Sungsonic™HD model name
-            lunch sshd_$target-userdebug
+            if [ -z "$variant" ]; then
+                variant="userdebug"
+            fi
+            lunch sshd_$target-$variant
         fi
     fi
     return $?
