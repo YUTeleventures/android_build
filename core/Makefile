@@ -1658,9 +1658,6 @@ SSHD_TARGET_PACKAGE := $(PRODUCT_OUT)/SSHD-$(SSHD_VERSION).zip
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
-endif
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(SSHD_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(SSHD_TARGET_PACKAGE) > $(SSHD_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(SSHD_TARGET_PACKAGE)"${CL_RST}
