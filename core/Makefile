@@ -919,8 +919,7 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
 else
     PRODUCT_EXTRA_RECOVERY_KEYS += \
         build/target/product/security/sshd \
-        build/target/product/security/sshd-devkey \
-        build/target/product/security/bacon
+        build/target/product/security/sshd-devkey
 endif
 
 # Generate a file containing the keys that will be read by the
