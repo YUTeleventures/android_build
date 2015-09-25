@@ -52,7 +52,7 @@ except:
     device = product
 
 if not depsonly:
-    print "Device %s not found. Attempting to retrieve device repository from SungsonicHD Github (http://github.com/SungSonicHD)." % device
+    print ("Device %s not found. Attempting to retrieve device repository from SungsonicHD Github (http://github.com/SungSonicHD)." % device)
 
 repositories = []
 
@@ -293,8 +293,5 @@ else:
             print("Done")
             sys.exit()
 
-<<<<<<< HEAD
 print ("Repository for %s not found in the SungsonicHD Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
-=======
-print("Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
->>>>>>> 55b9b64... roomservice: python3 support
+
