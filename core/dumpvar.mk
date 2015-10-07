@@ -83,5 +83,9 @@ $(info   HOST_OS_EXTRA=$(HOST_OS_EXTRA))
 $(info   HOST_BUILD_TYPE=$(HOST_BUILD_TYPE))
 $(info   BUILD_ID=$(BUILD_ID))
 $(info   OUT_DIR=$(OUT_DIR))
+ifeq ($(SSHD_TARGET),true)
+$(info   SSHD_TARGET=$(SSHD_TARGET))
+$(info   SSHD_FEATURES=$(SSHD_FEATURES))
+endif
 $(info ============================================)
 endif
