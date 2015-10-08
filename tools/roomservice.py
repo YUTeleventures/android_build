@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright (C) 2012-2013, The CyanogenMod Project
-# Copyright (C) 2015, The Sungsonic™HD
+# Copyright (C) 2015, The SungsonicHD
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ except:
     device = product
 
 if not depsonly:
-    print "Device %s not found. Attempting to retrieve device repository from Sungsonic™HD Github (http://github.com/SungSonicHD)." % device
+    print "Device %s not found. Attempting to retrieve device repository from SungsonicHD Github (http://github.com/SungSonicHD)." % device
 
 repositories = []
 
@@ -276,4 +276,4 @@ else:
             print "Done"
             sys.exit()
 
-print ("Repository for %s not found in the Sungsonic™HD Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+print ("Repository for %s not found in the SungsonicHD Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
