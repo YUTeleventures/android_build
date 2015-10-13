@@ -181,7 +181,7 @@ include $(BUILD_SYSTEM)/device.mk
 
 # A SSHD build needs only the SSHD product makefiles.
 ifneq ($(SSHD_BUILD),)
-  all_product_configs := $(shell ls device/*/$(SSHD_BUILD)/sshd.mk)
+  all_product_configs := $(shell find device -path "*/$(SSHD_BUILD)/sshd.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
