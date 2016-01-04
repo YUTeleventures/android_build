@@ -1680,7 +1680,7 @@ function sshdremote()
 
     PROJECT="$(echo $PROJ | sed 's/\//_/g')"
 
-    git remote add sshd git@github.com:SS-HD/$PFX$PROJECT
+    git remote add sshd git@github.com:Sungsonic/$PFX$PROJECT
     echo "Remote 'sshd' created"
     fi
 }

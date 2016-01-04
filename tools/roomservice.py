@@ -52,7 +52,7 @@ except:
     device = product
 
 if not depsonly:
-    print ("Device %s not found. Attempting to retrieve device repository from SungsonicHD Github (http://github.com/SS-HD)." % device)
+    print ("Device %s not found. Attempting to retrieve device repository from SungsonicHD Github (http://github.com/Sungsonic)." % device)
 
 repositories = []
 
@@ -71,7 +71,7 @@ def add_auth(githubreq):
         githubreq.add_header("Authorization","Basic %s" % githubauth)
 
 if not depsonly:
-    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:SS-HD+in:name+fork:true" % device)
+    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:Sungsonic+in:name+fork:true" % device)
     add_auth(githubreq)
     try:
         result = json.loads(urllib.request.urlopen(githubreq).read().decode())
@@ -174,12 +174,12 @@ def add_to_manifest(repositories, fallback_branch = None):
         repo_name = repository['repository']
         repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
-            print('SS-HD/%s already exists' % (repo_name))
+            print('Sunsonic/%s already exists' % (repo_name))
             continue
 
-        print('Adding dependency: SS-HD/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: Sungsonic/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "github", "name": "SS-HD/%s" % repo_name })
+            "remote": "github", "name": "Sungsonic/%s" % repo_name })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -210,7 +210,7 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         fetch_list = []
 
         for dependency in dependencies:
-            if not is_in_manifest("SS-HD/%s" % dependency['repository']):
+            if not is_in_manifest("Sungsonic/%s" % dependency['repository']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
@@ -293,5 +293,5 @@ else:
             print("Done")
             sys.exit()
 
-print ("Repository for %s not found in the SSHD Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+print ("Repository for %s not found in the Sungsonic Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
 
