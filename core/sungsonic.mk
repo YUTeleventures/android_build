@@ -106,6 +106,7 @@ LOCAL_DISABLE_STRICT := \
     libavmediaserviceextensions \
     wpa_supplicant \
     libssh \
+	libfuse \
     ibnvvisualizer
 
 LOCAL_FORCE_DISABLE_STRICT := \
@@ -140,6 +141,7 @@ LOCAL_FORCE_DISABLE_STRICT := \
     libavmediaserviceextensions \
     wpa_supplicant \
     libssh \
+	libfuse \
 	libnvvisualizer
 
 DISABLE_STRICT := \
