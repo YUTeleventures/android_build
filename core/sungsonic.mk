@@ -1,5 +1,5 @@
 # Copyright (C) 2014-2015 UBER
-# Copyright (C) 2016 THE SSHD Project.
+# Copyright (C) 2016 The Sungsonic Co.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -107,6 +107,9 @@ LOCAL_DISABLE_STRICT := \
     wpa_supplicant \
     libssh \
 	libfuse \
+	libbt-vendor \
+	libqsap_sdk \
+	libwifi-hal-qcom \
     ibnvvisualizer
 
 LOCAL_FORCE_DISABLE_STRICT := \
@@ -142,6 +145,9 @@ LOCAL_FORCE_DISABLE_STRICT := \
     wpa_supplicant \
     libssh \
 	libfuse \
+	libbt-vendor \
+	libqsap_sdk \
+	libwifi-hal-qcom \
 	libnvvisualizer
 
 DISABLE_STRICT := \
