@@ -1675,7 +1675,7 @@ name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
 endif
-name := $(YU_MOD_VERSION)-OTA-$(FILE_NAME_TAG)
+name := $(YU_MOD_VERSION)-OTA-$(TARGET_DEVICE)-$(FILE_NAME_TAG)
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
