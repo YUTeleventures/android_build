@@ -275,6 +275,9 @@ _product_stash_var_list += \
 _product_stash_var_list += \
 	GLOBAL_CFLAGS_NO_OVERRIDE \
 	GLOBAL_CPPFLAGS_NO_OVERRIDE \
+	#Our helper for release-key naming
+ _product_stash_var_list += \
+ 	PRODUCT_KEY_NAME
 
 #
 # Stash values of the variables in _product_stash_var_list.
