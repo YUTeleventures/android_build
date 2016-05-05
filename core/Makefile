@@ -105,22 +105,19 @@ endif
 # non-default dev keys (usually private keys from a vendor directory).
 # Both of these tags will be removed and replaced with "release-keys"
 # when the target-files is signed in a post-build step.
-
 ifeq ($(TARGET_BUILD_VARIANT),user)
    PRODUCT_KEY_NAME := releasekey
- else
+else
    PRODUCT_KEY_NAME := testkey
- endif
+endif
+
 
 ifeq ($(PRODUCT_KEY_NAME),testkey)
-BUILD_KEYS := test-keys		  BUILD_KEYS := test-keys
-  else		  else
- BUILD_KEYS := dev-keys		 +BUILD_KEYS := release-keys
-
-BUILD_KEYS := test-keys
+  BUILD_KEYS := test-keys
 else
-BUILD_KEYS := dev-keys
+ BUILD_KEYS := release-keys
 endif
+
 BUILD_VERSION_TAGS += $(BUILD_KEYS)
 BUILD_VERSION_TAGS := $(subst $(space),$(comma),$(sort $(BUILD_VERSION_TAGS)))
 
