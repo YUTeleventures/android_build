@@ -107,20 +107,17 @@ endif
 # when the target-files is signed in a post-build step.
 
 ifeq ($(TARGET_BUILD_VARIANT),user)
-   PRODUCT_KEY_NAME := releasekey
- else
-   PRODUCT_KEY_NAME := testkey
- endif
+	PRODUCT_KEY_NAME := releasekey
+else
+	PRODUCT_KEY_NAME := testkey
+endif
 
 ifeq ($(PRODUCT_KEY_NAME),testkey)
-BUILD_KEYS := test-keys		  BUILD_KEYS := test-keys
-  else		  else
- BUILD_KEYS := dev-keys		 +BUILD_KEYS := release-keys
-
-BUILD_KEYS := test-keys
-else
-BUILD_KEYS := dev-keys
+ BUILD_KEYS := test-keys
+	 else
+ BUILD_KEYS := release-keys
 endif
+
 BUILD_VERSION_TAGS += $(BUILD_KEYS)
 BUILD_VERSION_TAGS := $(subst $(space),$(comma),$(sort $(BUILD_VERSION_TAGS)))
 
@@ -168,7 +165,7 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
   ifeq "true" "$(DISPLAY_BUILD_NUMBER)"
     BUILD_DISPLAY_ID := $(BUILD_ID).$(BUILD_NUMBER) $(BUILD_KEYS)
   else
-    BUILD_DISPLAY_ID := $(BUILD_ID)
+    BUILD_DISPLAY_ID := $(BUILD_ID) $(BUILD_KEYS)
   endif
 else
   # Non-user builds should show detailed build information
@@ -1686,7 +1683,7 @@ name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
 endif
-name := $(YU_MOD_VERSION)-OTA-$(TARGET_DEVICE)-$(FILE_NAME_TAG)
+name := $(YU_MOD_VERSION)-OTA-$(FILE_NAME_TAG)
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
