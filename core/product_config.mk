@@ -179,9 +179,9 @@ include $(BUILD_SYSTEM)/node_fns.mk
 include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
-# A SSHD build needs only the SSHD product makefiles.
-ifneq ($(SSHD_BUILD),)
-  all_product_configs := $(shell find device -path "*/$(SSHD_BUILD)/sshd.mk")
+# A YUOS build needs only the YU product makefiles.
+ifneq ($(YU_BUILD),)
+  all_product_configs := $(shell find device -path "*/$(YU_BUILD)/yu.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
@@ -192,9 +192,9 @@ else
     # files in the tree.
     all_product_configs := $(get-all-product-makefiles)
   endif # TARGET_BUILD_APPS
-endif # SSHD_BUILD
+endif # YU_BUILD
 
-ifeq ($(SSHD_BUILD),)
+ifeq ($(YU_BUILD),)
 # Find the product config makefile for the current product.
 # all_product_configs consists items like:
 # <product_name>:<path_to_the_product_makefile>

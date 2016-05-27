@@ -59,6 +59,6 @@ if [ "$TARGET_UNIFIED_DEVICE" == "" ] ; then
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
-echo "ro.sshd.device=$SSHD_DEVICE"
+echo "ro.yu.device=$YU_DEVICE"
 
 echo "# end build properties"

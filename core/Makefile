@@ -214,7 +214,7 @@ endif
 	$(hide) TARGET_BUILD_TYPE="$(TARGET_BUILD_VARIANT)" \
 			TARGET_BUILD_FLAVOR="$(TARGET_PRODUCT)-$(TARGET_BUILD_VARIANT)" \
 			TARGET_DEVICE="$(TARGET_VENDOR_DEVICE_NAME)" \
-			SSHD_DEVICE="$(TARGET_DEVICE)" \
+			YU_DEVICE="$(TARGET_DEVICE)" \
 			PRODUCT_NAME="$(TARGET_VENDOR_PRODUCT_NAME)" \
 			PRODUCT_BRAND="$(PRODUCT_BRAND)" \
 			PRODUCT_DEFAULT_LOCALE="$(call get-default-product-locale,$(PRODUCT_LOCALES))" \
@@ -946,8 +946,8 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
     PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
 else
     PRODUCT_EXTRA_RECOVERY_KEYS += \
-        build/target/product/security/sshd \
-        build/target/product/security/sshd-devkey
+        build/target/product/security/yu \
+        build/target/product/security/yu-devkey
 endif
 
 # Generate a file containing the keys that will be read by the
@@ -1861,7 +1861,7 @@ name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
 endif
-name := $(SSHD_MOD_VERSION)-OTA-$(FILE_NAME_TAG)
+name := $(YU_MOD_VERSION)-OTA-$(FILE_NAME_TAG)
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
@@ -1876,7 +1876,7 @@ endif
 ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
-ifneq ($(SSHD_BUILD),)
+ifneq ($(YU_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
@@ -1916,7 +1916,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-SSHD_TARGET_PACKAGE := $(PRODUCT_OUT)/$(SSHD_MOD_VERSION).zip
+YU_TARGET_PACKAGE := $(PRODUCT_OUT)/$(YU_MOD_VERSION).zip
 
 .PHONY: otapackage bacon bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
@@ -1927,9 +1927,9 @@ bootzip: bootimage
 	   $(TARGET_DEVICE)
 
 bacon: otapackage
-	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(SSHD_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(SSHD_TARGET_PACKAGE) > $(SSHD_TARGET_PACKAGE).md5sum
-	@echo -e ${CL_CYN}"Package Complete: $(SSHD_TARGET_PACKAGE)"${CL_RST}
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(YU_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(YU_TARGET_PACKAGE) > $(YU_TARGET_PACKAGE).md5sum
+	@echo -e ${CL_CYN}"Package Complete: $(YU_TARGET_PACKAGE)"${CL_RST}
 
 # -----------------------------------------------------------------
 # The factory package

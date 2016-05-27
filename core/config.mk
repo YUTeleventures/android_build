@@ -234,7 +234,7 @@ ifeq ($(TARGET_CPU_ABI),)
   $(error No TARGET_CPU_ABI defined by board config: $(board_config_mk))
 endif
 TARGET_CPU_ABI2 := $(strip $(TARGET_CPU_ABI2))
-include $(BUILD_SYSTEM)/sungsonic.mk
+include $(BUILD_SYSTEM)/yuoptimizations.mk
 
 # $(1): os/arch
 define select-android-config-h
@@ -714,10 +714,10 @@ ifneq ($(TARGET_COPY_FILES_OVERRIDES),)
     PRODUCT_COPY_FILES := $(filter-out $(TARGET_COPY_FILES_OVERRIDES), $(PRODUCT_COPY_FILES))
 endif
 
-ifneq ($(SSHD_BUILD),)
+ifneq ($(YU_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-$(eval include vendor/sshd/sepolicy/sepolicy.mk)
+$(eval include vendor/yuos/sepolicy/sepolicy.mk)
 
 # Include any vendor specific config.mk file
 -include $(TOPDIR)vendor/*/build/core/config.mk

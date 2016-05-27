@@ -23,7 +23,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - sepgrep: Greps on all local sepolicy files.
 - sgrep:   Greps on all local source files.
 - godir:   Go to the directory containing a file.
-- sshdremote: Add a git remote for matching SSHD repository.
+- yuremote: Add a git remote for matching YUTeleventures repository.
 - aospremote: Add git remote for matching AOSP repository
 - cafremote: Add git remote for matching CodeAurora repository.
 - mka:      Builds using SCHED_BATCH on all processors
@@ -80,13 +80,13 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^sshd_") ; then
-       SSHD_BUILD=$(echo -n $1 | sed -e 's/^sshd_//g')
-       export BUILD_NUMBER=$((date +%s%N ; echo $SSHD_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+    if (echo -n $1 | grep -q -e "^yu_") ; then
+       YU_BUILD=$(echo -n $1 | sed -e 's/^yu_//g')
+       export BUILD_NUMBER=$((date +%s%N ; echo $YU_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
-       SSHD_BUILD=
+       YU_BUILD=
     fi
-    export SSHD_BUILD
+    export YU_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
@@ -508,7 +508,7 @@ function print_lunch_menu()
        echo "  (ohai, koush!)"
     fi
     echo
-    if [ "z${SSHD_DEVICES_ONLY}" != "z" ]; then
+    if [ "z${YU_DEVICES_ONLY}" != "z" ]; then
        echo "Breakfast menu... pick a combo:"
     else
        echo "Lunch menu... pick a combo:"
@@ -522,7 +522,7 @@ function print_lunch_menu()
         i=$(($i+1))
     done | column
 
-    if [ "z${SSHD_DEVICES_ONLY}" != "z" ]; then
+    if [ "z${YU_DEVICES_ONLY}" != "z" ]; then
        echo "... and don't forget the bacon!"
     fi
 
@@ -545,10 +545,10 @@ function breakfast()
 {
     target=$1
     local variant=$2
-    SSHD_DEVICES_ONLY="true"
+    YU_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
-    for f in `/bin/ls vendor/sshd/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/yuos/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
             . $f
@@ -564,11 +564,11 @@ function breakfast()
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the Sungsonic™HD model name
+            # This is probably just the YUOS model name
             if [ -z "$variant" ]; then
                 variant="userdebug"
             fi
-            lunch sshd_$target-$variant
+            lunch yu_$target-$variant
         fi
     fi
     return $?
@@ -585,7 +585,7 @@ function lunch()
         answer=$1
     else
         print_lunch_menu
-        echo -n "Which would you like? [aosp_arm-eng] "
+        echo -n "Which would you like? [yu_arm-eng] "
         read answer
     fi
 
@@ -618,7 +618,7 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the SSHD github
+        # if we can't find a product, try to grab it off the YUTeleventures github
         T=$(gettop)
         pushd $T > /dev/null
         build/tools/roomservice.py $product
@@ -728,8 +728,8 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=$(get_build_var SSHD_VERSION)
-        ZIPFILE=sshd-$MODVERSION.zip
+        MODVERSION=$(get_build_var YU_VERSION)
+        ZIPFILE=YUOS-$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
@@ -744,7 +744,7 @@ function eat()
             done
             echo "Device Found.."
         fi
-    if (adb shell getprop ro.sshd.device | grep -q "$SSHD_BUILD");
+    if (adb shell getprop ro.yu.device | grep -q "$YU_BUILD");
     then
         # if adbd isn't root we can't write to /cache/recovery/
         adb root
@@ -766,7 +766,7 @@ EOF
     fi
     return $?
     else
-        echo "The connected device does not appear to be $SSHD_BUILD, run away!"
+        echo "The connected device does not appear to be $YU_BUILD, run away!"
     fi
 }
 
@@ -1666,9 +1666,9 @@ function godir () {
     \cd $T/$pathname
 }
 
-function sshdremote()
+function yuremote()
 {
-    git remote rm sshd 2> /dev/null
+    git remote rm yu 2> /dev/null
     PFX=""
     if [ ! -d .git ]
     then
@@ -1682,24 +1682,11 @@ function sshdremote()
 
     PROJECT="$(echo $PROJ | sed 's/\//_/g')"
 
-    git remote add sshd git@github.com:Sungsonic/$PFX$PROJECT
-    echo "Remote 'sshd' created"
+    git remote add yu git@github.com:YUTeleventures/$PFX$PROJECT
+    echo "Remote 'yu' created"
     fi
 }
-export -f sshdremote
-
-function cmremote()
-{
-    git remote rm cm 2> /dev/null
-    if [ ! -d .git ]
-    then
-        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
-    fi
-    PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
-    PFX="android_$(echo $PROJECT | sed 's/\//_/g')"
-    git remote add cm git@github.com:CyanogenMod/$PFX
-    echo "Remote 'cm' created"
-}
+export -f yuremote
 
 function aospremote()
 {
@@ -1763,7 +1750,7 @@ function installboot()
     sleep 1
 	adb wait-for-online shell mount /system 2>&1 > /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.sshd.device | grep -q "$SSHD_BUILD");
+    if (adb shell getprop ro.yu.device | grep -q "$YU_BUILD");
     then
         adb push $OUT/boot.img /cache/
         for i in $OUT/system/lib/modules/*;
@@ -1774,7 +1761,7 @@ function installboot()
         adb shell chmod 644 /system/lib/modules/*
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $SSHD_BUILD, run away!"
+        echo "The connected device does not appear to be $YU_BUILD, run away!"
     fi
 }
 
@@ -1808,13 +1795,13 @@ function installrecovery()
     sleep 1
 	adb wait-for-online shell mount /system 2>&1 >> /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.sshd.device | grep -q "$SSHD_BUILD");
+    if (adb shell getprop ro.yu.device | grep -q "$YU_BUILD");
     then
         adb push $OUT/recovery.img /cache/
         adb shell dd if=/cache/recovery.img of=$PARTITION
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $SSHD_BUILD, run away!"
+        echo "The connected device does not appear to be $YU_BUILD, run away!"
     fi
 }
 
@@ -1922,7 +1909,7 @@ function dopush()
         echo "Device Found."
     fi
 
-    if (adb shell getprop ro.sshd.device | grep -q "$SSHD_BUILD") || [ "$FORCE_PUSH" == "true" ];
+    if (adb shell getprop ro.yu.device | grep -q "$YU_BUILD") || [ "$FORCE_PUSH" == "true" ];
     then
     # retrieve IP and PORT info if we're using a TCP connection
     TCPIPPORT=$(adb devices | egrep '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+[^0-9]+' \
@@ -2033,7 +2020,7 @@ EOF
     rm -f $OUT/.log
     return 0
     else
-        echo "The connected device does not appear to be $SSHD_BUILD, run away!"
+        echo "The connected device does not appear to be $YU_BUILD, run away!"
     fi
 }
 
@@ -2157,7 +2144,7 @@ unset f
 
 # Add completions
 check_bash_version && {
-    dirs="sdk/bash_completion vendor/sshd/bash_completion"
+    dirs="sdk/bash_completion vendor/yuos/bash_completion"
     for dir in $dirs; do
     if [ -d ${dir} ]; then
         for f in `/bin/ls ${dir}/[a-z]*.bash 2> /dev/null`; do
