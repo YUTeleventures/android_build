@@ -111,6 +111,7 @@ LOCAL_DISABLE_STRICT := \
 	libbt-vendor \
 	libqsap_sdk \
 	libwifi-hal-qcom \
+              libdw \
     ibnvvisualizer
 
 LOCAL_FORCE_DISABLE_STRICT := \
@@ -149,6 +150,7 @@ LOCAL_FORCE_DISABLE_STRICT := \
 	libbt-vendor \
 	libqsap_sdk \
 	libwifi-hal-qcom \
+              libdw \
 	libnvvisualizer
 
 DISABLE_STRICT := \
