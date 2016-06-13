@@ -1139,7 +1139,13 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(RECOVERY_PATCH_INSTALL))
 
 
-FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS)
+build-changelog: $(INTERNAL_SYSTEMIMAGE_FILES)
+	@echo -e ${CL_YLW}"Generating Changelog"${CL_RST}
+	$(hide) $(CHANGELOG_SCRIPT) $@
+finis
+.PHONY: build-changelog
+
+FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS) systemimage-squisher build-changelog
 # -----------------------------------------------------------------
 # installed file list
 # Depending on anything that $(BUILT_SYSTEMIMAGE) depends on.
@@ -1916,8 +1922,8 @@ bootzip: bootimage
 
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(YU_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(YU_TARGET_PACKAGE) > $(YU_TARGET_PACKAGE).md5sum
-	@echo -e ${CL_CYN}"Package Complete: $(YU_TARGET_PACKAGE)"${CL_RST}
+	@echo -e ${CL_YLW}"Running finisher..."${CL_RST}
+	$(hide) $(FINISHER_SCRIPT) $@
 
 # -----------------------------------------------------------------
 # The factory package
