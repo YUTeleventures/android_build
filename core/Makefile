@@ -1137,9 +1137,22 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(PDK_FUSION_SYSIMG_FILES) \
     $(RECOVERY_RESOURCE_ZIP) \
     $(RECOVERY_PATCH_INSTALL))
+	
+systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
+ifdef SQUISHER_SCRIPT
+	@echo -e ${CL_YLW}"Optimizing PNGs to Shrink ROM Size!"${CL_RST}
+	$(hide) APKCERTS=$(APKCERTS_FILE) $(SQUISHER_SCRIPT) $@
+endif
+.PHONY: systemimage-squisher
 
+build-changelog: $(INTERNAL_SYSTEMIMAGE_FILES)
+ifneq ($(and $(CHANGELOG_SCRIPT),$(IS_RELEASED_BUILD)),)
+	@echo -e ${CL_YLW}"Generating Changelog"${CL_RST}
+	$(hide) $(CHANGELOG_SCRIPT) $@
+endif
+.PHONY: build-changelog
 
-FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS)
+FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS) systemimage-squisher build-changelog
 # -----------------------------------------------------------------
 # installed file list
 # Depending on anything that $(BUILT_SYSTEMIMAGE) depends on.
@@ -1906,18 +1919,20 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 
 YU_TARGET_PACKAGE := $(PRODUCT_OUT)/$(YU_MOD_VERSION).zip
 
-.PHONY: otapackage bacon bootzip
+PHONY: otapackage bacon bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-bootzip: bootimage
-	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
-	   $(recovery_fstab) \
-	   $(OUT) \
-	   $(TARGET_DEVICE)
-
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(YU_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(YU_TARGET_PACKAGE) > $(YU_TARGET_PACKAGE).md5sum
-	@echo -e ${CL_CYN}"Package Complete: $(YU_TARGET_PACKAGE)"${CL_RST}
+ifdef FINISHER_SCRIPT
+	@echo -e ${CL_YLW}"Running finisher..."${CL_RST}
+	$(hide) $(FINISHER_SCRIPT) $@
+endif
+bootzip: bootimage
+	   $(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
+	   $(recovery_fstab) \
+	   $(OUT) \
+	   $(TARGET_DEVICE) \
+	   $(BOOT_ZIP_OUT_FILE)
 
 # -----------------------------------------------------------------
 # The factory package
