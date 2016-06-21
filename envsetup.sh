@@ -566,7 +566,7 @@ function breakfast()
         else
             # This is probably just the YUOS model name
             if [ -z "$variant" ]; then
-                variant="user"
+                variant="userdebug"
             fi
             lunch yu_$target-$variant
         fi
