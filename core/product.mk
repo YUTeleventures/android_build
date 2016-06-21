@@ -326,6 +326,9 @@ _product_stash_var_list += \
 _product_stash_var_list += \
 	GLOBAL_CFLAGS_NO_OVERRIDE \
 	GLOBAL_CPPFLAGS_NO_OVERRIDE \
+	#Our helper for release-key naming
+ _product_stash_var_list += \
+ 	PRODUCT_KEY_NAME
 
 _product_stash_var_list += \
 	TARGET_SKIP_DEFAULT_LOCALE \
